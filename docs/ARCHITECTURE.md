@@ -5,7 +5,8 @@ This document is for developers who maintain the starter or port the desktop app
 ## Components
 
 ```
-claude-starter/
+sarkhans-claude-starter/
+├── .github/workflows/release.yml ← builds and publishes a release when VERSION changes on main
 ├── claude-web-starter/          ← the product: cross-platform Node.js installer + template
 │   ├── install.mjs              ← CLI (the only thing the desktop app talks to)
 │   ├── VERSION                  ← starter version (semver)
@@ -21,8 +22,7 @@ claude-starter/
 │   │       ├── hooks/*.mjs      ← enforcement (Node, no dependencies)
 │   │       └── scripts/verify.mjs
 │   └── packs/<stack>/rules/*.md ← stack rules copied only when the stack is detected
-├── macos-app/                   ← SwiftUI desktop app (macOS)
-├── scripts/                     ← helper scripts (Node.js setup on macOS)
+├── macos-app/                   ← SwiftUI desktop app (macOS), build scripts, update source
 └── docs/
 ```
 
@@ -65,7 +65,7 @@ App-level files: `~/claude-web-starter/VERSION`, `~/claude-web-starter/skills-ca
 - Node.js discovery: `zsh -lc 'command -v node'`, Homebrew paths, nvm, fnm, volta, asdf, mise. If missing, **Install Node.js** downloads the latest LTS `.pkg` from `https://nodejs.org/dist/index.json` and opens it.
 - Git check: Homebrew git or `xcode-select -p`; **Install Git** runs `xcode-select --install`.
 - Jobs run through one serial queue. Settings changes are optimistic: the UI updates at once, and the project is re-read from disk when its last queued job finishes. This avoids flicker and races.
-- Settings in UserDefaults: `projectsFolder`, `responseLanguage`, `showInstalled` (default off). The app warns when the projects folder has no projects and until a folder has been chosen.
+- Settings in UserDefaults: `projectsFolder` (its absence shows the first-run setup screen) and `responseLanguage` (default for new projects). The GitHub token for private update sources is stored in the Keychain.
 
 ## Self-update (macOS app)
 - **Source:** `Contents/Resources/update-repo.txt` (`owner/repo`). Written at build time from `UPDATE_REPO` (the release workflow sets it to this repository), `GITHUB_REPOSITORY` or `macos-app/update-repo.txt`. Without it, updates are off.
@@ -85,11 +85,12 @@ App-level files: `~/claude-web-starter/VERSION`, `~/claude-web-starter/skills-ca
    - **First run:** a setup checklist covers Node.js (one-click install), Git (one-click install), the projects folder (with a found-projects count) and Claude's default language. "Continue" is enabled once Node.js and the starter files are present.
    - **Main window, sidebar:** a segmented filter (Needs setup / Ready / All, with counts), search, and a multi-select project list showing name, stacks and a status pill (Not set up / Update available / Ready / Working… / Didn't finish). A footer button sets up everything that needs it.
    - **Main window, detail panel:**
-     - one project shows a header, one primary action (Set up / Update / Ready / Try again), language, "Protect the current design", project type (Existing/New), skill toggles per catalog category, and Maintenance (Repair, Remove, both confirmed);
+     - one project shows a header, one primary action (Set up / Update / Ready / Try again), language, "Protect the current design", project type (Existing/New), skills (built-in list, Recommended with "Turn on recommended", other catalog categories, My skills with "Add your own skill…"), and Maintenance (Repair keeps the chosen skills, Remove; both confirmed);
      - several projects show bulk versions of the same actions;
      - no selection shows an overview with counts.
    - **Feedback:** a toast-style notice after each job ("3 projects are ready", or an error with "Show details"); full installer output goes in an Activity sheet.
-   - **Settings window:** projects folder, default language, versions.
+   - **Settings window:** projects folder, default language, My skills, Updates (check now, optional GitHub token), versions.
+   - **Updates:** an "Update to x.y.z" toolbar button and a sheet with release notes and "Update and restart" (see Self-update).
 2. **Embedded starter**: ship `claude-web-starter.zip` + version; extract to `%USERPROFILE%\claude-web-starter` when newer (delete old folder first).
 3. **Node discovery**: `where node`, `%ProgramFiles%\nodejs\node.exe`, nvm-windows (`%NVM_SYMLINK%`), volta (`%LOCALAPPDATA%\Volta\bin`), fnm. Setup helper: `winget install OpenJS.NodeJS.LTS` (needs Git for Windows too: `winget install Git.Git`).
 4. **Process calls**: `node.exe <starter>\install.mjs <dir> [flags]`, capture stdout+stderr, one at a time.
