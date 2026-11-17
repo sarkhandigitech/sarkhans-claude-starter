@@ -445,6 +445,7 @@ enum Updater {
 
     static func download(_ release: ReleaseInfo) async throws -> URL {
         var request = URLRequest(url: release.token == nil ? release.downloadURL : release.assetAPIURL)
+        request.timeoutInterval = 120
         request.setValue("SarkhansClaudeStarter/\(AppInfo.version)", forHTTPHeaderField: "User-Agent")
         if let token = release.token {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -490,7 +491,12 @@ enum Updater {
         let script = work.appendingPathComponent("install.sh")
         let text = """
         #!/bin/bash
-        while /bin/kill -0 \(ProcessInfo.processInfo.processIdentifier) 2>/dev/null; do /bin/sleep 0.2; done
+        PID=\(ProcessInfo.processInfo.processIdentifier)
+        for _ in $(/usr/bin/seq 1 50); do /bin/kill -0 $PID 2>/dev/null || break; /bin/sleep 0.2; done
+        /bin/kill $PID 2>/dev/null
+        for _ in $(/usr/bin/seq 1 25); do /bin/kill -0 $PID 2>/dev/null || break; /bin/sleep 0.2; done
+        /bin/kill -9 $PID 2>/dev/null
+        /bin/sleep 0.3
         \(writable ? swap : ":")
         /usr/bin/open \(target)
         """
@@ -550,6 +556,7 @@ final class StarterModel: ObservableObject {
     @Published private(set) var availableUpdate: ReleaseInfo?
     @Published private(set) var updateStatus: String?
     @Published private(set) var isUpdating = false
+    @Published private(set) var updatePhase = ""
     @Published var showingUpdate = false
     @Published private(set) var pendingKeys: Set<String> = []
     @Published private(set) var hasChosenFolder = UserDefaults.standard.string(forKey: "projectsFolder") != nil
@@ -661,15 +668,22 @@ final class StarterModel: ObservableObject {
             return
         }
         isUpdating = true
-        log += "… Downloading \(AppInfo.name) \(release.version)\n\n"
         do {
+            setUpdatePhase("Downloading \(release.version)…")
             let zip = try await Updater.download(release)
+            setUpdatePhase("Checking the download…")
             let prepared = try await Task.detached(priority: .userInitiated) { try Updater.prepareInstall(zip: zip) }.value
             if let command = prepared.adminCommand {
+                setUpdatePhase("Waiting for your password…")
                 try Updater.runWithAdministratorPrivileges(command)
             }
+            setUpdatePhase("Restarting…")
             try Updater.launch(prepared.script)
+            showingUpdate = false
+            try? await Task.sleep(nanoseconds: 400_000_000)
             NSApp.terminate(nil)
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            exit(0)
         } catch UpdateError.cancelled {
             isUpdating = false
             showNotice("Update cancelled", isError: false)
@@ -678,6 +692,11 @@ final class StarterModel: ObservableObject {
             log += "✖ Update failed: \(error.localizedDescription)\n\n"
             showNotice("Update failed: \(error.localizedDescription)", isError: true)
         }
+    }
+
+    private func setUpdatePhase(_ phase: String) {
+        updatePhase = phase
+        log += "… Update: \(phase)\n\n"
     }
 
     func openReleasePage() {
@@ -2624,7 +2643,7 @@ struct UpdateSheet: View {
                             HStack(spacing: 6) {
                                 ProgressView()
                                     .controlSize(.small)
-                                Text("Updating…")
+                                Text(model.updatePhase.isEmpty ? "Updating…" : model.updatePhase)
                             }
                         } else {
                             Text("Update and restart")
