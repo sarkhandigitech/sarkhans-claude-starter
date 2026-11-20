@@ -83,10 +83,11 @@
   section.track { padding: 0; border: 0; }
   .track { position: relative; }
   .stick { position: sticky; top: 0; height: 100vh; padding-top: var(--nav-height); overflow: hidden; display: flex; align-items: center; }
-  .scroll-ready #top { height: 210vh; }
-  .scroll-ready #story { height: 620vh; }
-  .scroll-ready #agents { height: 340vh; }
-  .scroll-ready #modes { height: 400vh; }
+  .scroll-ready #top { height: 150vh; }
+  .scroll-ready #story { height: 470vh; }
+  .scroll-ready #agents { height: 230vh; }
+  .scroll-ready #modes { height: 290vh; }
+  .scroll-ready #layers { height: 230vh; }
   html:not(.scroll-ready) .stick { position: relative; height: auto; padding: calc(var(--nav-height) + 72px) 0 96px; }
   html:not(.scroll-ready) .track + .track .stick, html:not(.scroll-ready) section + .track .stick { padding-top: 96px; border-top: 1px solid var(--line); }
 
@@ -244,6 +245,57 @@
   .note { margin: 32px 0 0; padding: 18px 24px; border-left: 4px solid var(--amber); background: var(--white); border-radius: 0 var(--radius-control) var(--radius-control) 0; color: var(--slate); }
   .note strong { color: var(--ink); }
 
+  .ledger td:nth-child(2) .chip { display: inline-block; margin-left: 12px; padding: 1px 8px; border-radius: 5px; background: var(--amber); color: var(--ink); font: 700 12px/1.5 var(--sans); vertical-align: 1px; transform: rotate(-4deg); transition: opacity .15s .3s, transform .3s cubic-bezier(.3, 1.4, .5, 1) .3s; }
+  .ledger .tried { text-decoration: line-through; text-decoration-color: rgba(168, 98, 10, .55); transition: text-decoration-color .3s .45s; }
+  .ledger td { transition: opacity .35s, transform .35s var(--ease); }
+  .ledger td:last-child { transition-delay: .55s; }
+  .scroll-ready .ledger tbody tr:not(.in) td { opacity: 0; transform: translateY(14px); }
+  .scroll-ready .ledger tbody tr:not(.in) .chip { opacity: 0; transform: rotate(-4deg) scale(1.9); }
+  .scroll-ready .ledger tbody tr:not(.in) .tried { text-decoration-color: transparent; }
+
+  .layers-grid { display: grid; grid-template-columns: minmax(0, 440px) minmax(0, 1fr); gap: 56px; align-items: center; }
+  .layers-copy .scene-title { margin-bottom: 16px; }
+  .layers-copy .intro { font-size: 17px; margin-bottom: 28px; }
+  .layer-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+  .layer-list li { padding-left: 18px; border-left: 3px solid var(--line); transition: opacity .3s, border-color .3s; }
+  .layer-list li.on { border-color: var(--amber); }
+  .scroll-ready .layer-list li:not(.on) { opacity: .35; }
+  .layer-list h3 { font-size: 20px; letter-spacing: -0.02em; margin: 0; }
+  .layer-list .kind { color: var(--amber-deep); font-weight: 600; margin: 0 0 4px; font-size: 15px; }
+  .layer-list p { margin: 0; color: var(--slate); font-size: 15.5px; line-height: 1.5; }
+  .stack { display: block; width: 100%; height: auto; max-height: calc(100vh - var(--nav-height) - 48px); overflow: visible; }
+  .stack .plate { transition: opacity .2s; }
+  .stack text { font-family: var(--sans); }
+  .stack .pl-name { font-size: 20px; font-weight: 700; fill: var(--ink); }
+  .stack .pl-kind { font-size: 15px; font-weight: 500; fill: var(--slate); }
+
+  .commands code > span { min-height: 1.7em; }
+  .commands .caret { display: inline-block; width: 8px; height: 15px; margin-left: 1px; vertical-align: -2px; background: var(--amber); }
+
+  .team-map { position: relative; height: 360px; }
+  .team-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .team-lines path { fill: none; stroke: var(--amber-deep); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset .8s var(--ease); }
+  .team-lines path + path { transition-delay: .15s; }
+  .tm-folder { position: absolute; left: 0; top: 70px; width: 44%; height: 220px; display: flex; flex-direction: column; gap: 10px; padding: 22px 24px; border-radius: var(--radius-panel); background: var(--plum); color: #ece6f8; }
+  .tm-folder b { font-size: 15px; color: #f7d9ad; }
+  .tm-folder pre { margin: 0; font: 400 14px/1.7 var(--mono); }
+  .tm-mac { position: absolute; left: 61%; right: 0; height: 150px; display: flex; flex-direction: column; gap: 8px; padding: 18px 20px; border-radius: var(--radius-panel); background: var(--white); box-shadow: 0 0 0 1px var(--line); }
+  .tm-mac b { font-size: 17px; }
+  .tm-path { font: 13px var(--mono); color: var(--slate); }
+  .tm-chips { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+  .tm-chip { display: inline-flex; align-items: center; gap: 8px; padding: 2px 10px; border-radius: 7px; background: var(--lilac); font: 13px var(--mono); transition: opacity .25s, transform .3s cubic-bezier(.3, 1.5, .5, 1); }
+  .tm-chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+  .tm-mac:nth-of-type(2) .tm-chip { transition-delay: .9s; }
+  .tm-mac:nth-of-type(2) .tm-chip + .tm-chip { transition-delay: 1.05s; }
+  .tm-mac:nth-of-type(3) .tm-chip { transition-delay: 1.1s; }
+  .tm-mac:nth-of-type(3) .tm-chip + .tm-chip { transition-delay: 1.25s; }
+  .scroll-ready .team-map:not(.play) .team-lines path { stroke-dashoffset: 1; }
+  .scroll-ready .team-map:not(.play) .tm-chip { opacity: 0; transform: translateX(-12px); }
+
+  .column { position: relative; transition: opacity .3s; }
+  .columns.syncing .column:not(.now) { opacity: .4; }
+  .columns.syncing .column.now::before { content: ""; position: absolute; top: -2px; left: 0; right: 28px; height: 2px; background: var(--amber); }
+
   .team { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); align-items: stretch; margin-top: 40px; }
   .team-title { font-size: 21px; letter-spacing: -0.02em; margin: 0 0 12px; }
   .team-steps { margin: 0; padding-left: 22px; color: var(--slate); }
@@ -284,7 +336,11 @@
     .team pre { padding: 20px; font-size: 12.5px; }
   }
   @media (max-width: 920px) {
-    .story-grid, .modes-grid, .week-grid, .options, .team { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+    .story-grid, .modes-grid, .week-grid, .layers-grid, .options, .team { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+    .team-map { height: auto; display: grid; gap: 16px; }
+    .team-lines { display: none; }
+    .tm-folder, .tm-mac { position: static; width: auto; height: auto; }
+    .ledger td:nth-child(2) .chip { margin-left: 8px; }
     .columns { grid-template-columns: 1fr; }
     .column { padding: 24px 0 8px; border-left: 0; border-top: 1px solid var(--line); }
     .column:first-child { border-top: 0; }
@@ -407,40 +463,33 @@
     <table class="table ledger">
       <thead><tr><th>Rule</th><th>What Claude tried</th><th>What happens instead</th></tr></thead>
       <tbody>
-        <tr><td>Secrets</td><td>Read .env</td><td>Uses .env.example and the config module.</td></tr>
-        <tr><td>Main branch</td><td>git push origin main</td><td>Pushes a feature branch and opens a pull request.</td></tr>
-        <tr><td>Invented code</td><td>import pad from "left-pad"</td><td>Checks what's really installed before using it.</td></tr>
-        <tr><td>Your name on commits</td><td>Co-Authored-By: Claude</td><td>Commits read as yours, with no AI mention.</td></tr>
-        <tr><td>Comments</td><td>// TODO fix later</td><td>Finishes the work or tells you what's left.</td></tr>
-        <tr><td>Swallowed errors</td><td>catch {}</td><td>Handles the error or passes it on with context.</td></tr>
-        <tr><td>Your design</td><td>Edits tailwind.config.ts</td><td>Waits until you ask for a design change.</td></tr>
-        <tr><td>Database</td><td>price FLOAT in a migration</td><td>Uses a decimal type and gets a schema review.</td></tr>
-        <tr><td>"Done" too early</td><td>Finishes with type errors</td><td>Sent back to fix them before it can stop.</td></tr>
+        <tr><td>Secrets</td><td><span class="tried">Read .env</span><i class="chip">Stopped</i></td><td>Uses .env.example and the config module.</td></tr>
+        <tr><td>Main branch</td><td><span class="tried">git push origin main</span><i class="chip">Stopped</i></td><td>Pushes a feature branch and opens a pull request.</td></tr>
+        <tr><td>Invented code</td><td><span class="tried">import pad from "left-pad"</span><i class="chip">Stopped</i></td><td>Checks what's really installed before using it.</td></tr>
+        <tr><td>Your name on commits</td><td><span class="tried">Co-Authored-By: Claude</span><i class="chip">Stopped</i></td><td>Commits read as yours, with no AI mention.</td></tr>
+        <tr><td>Comments</td><td><span class="tried">// TODO fix later</span><i class="chip">Stopped</i></td><td>Finishes the work or tells you what's left.</td></tr>
+        <tr><td>Swallowed errors</td><td><span class="tried">catch {}</span><i class="chip">Stopped</i></td><td>Handles the error or passes it on with context.</td></tr>
+        <tr><td>Your design</td><td><span class="tried">Edits tailwind.config.ts</span><i class="chip">Stopped</i></td><td>Waits until you ask for a design change.</td></tr>
+        <tr><td>Database</td><td><span class="tried">price FLOAT in a migration</span><i class="chip">Stopped</i></td><td>Uses a decimal type and gets a schema review.</td></tr>
+        <tr><td>"Done" too early</td><td><span class="tried">Finishes with type errors</span><i class="chip">Stopped</i></td><td>Sent back to fix them before it can stop.</td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
-<section>
-  <div class="wrap">
-    <h2>Three layers that work together</h2>
-    <p class="intro">Your code stays untouched. The app adds a short CLAUDE.md and a .claude folder to each project, hidden from git. The plugin needs no files in your projects at all.</p>
-    <div class="columns">
-      <div class="column">
-        <h3>Rules</h3>
-        <p class="kind">What Claude reads</p>
-        <p>Third eye, clean code, testing, security, git and design rules. About 2,800 tokens per session; detailed rules load only for matching files.</p>
+<section class="track" id="layers" aria-label="Three layers">
+  <div class="stick">
+    <div class="wrap layers-grid">
+      <div class="layers-copy">
+        <h2 class="scene-title">Three layers that work together</h2>
+        <p class="intro">Your code stays untouched. The app adds a short CLAUDE.md and a .claude folder to each project, hidden from git. The plugin needs no files in your projects at all.</p>
+        <ol class="layer-list">
+          <li class="on"><h3>Rules</h3><p class="kind">What Claude reads</p><p>Third eye, clean code, testing, security, git and design rules. About 2,800 tokens per session; detailed rules load only for matching files.</p></li>
+          <li class="on"><h3>Agents</h3><p class="kind">Who does the bigger work</p><p>An architect plans, specialists build in parallel, a reviewer checks every result. Reviewers keep notes per project and get sharper over time.</p></li>
+          <li class="on"><h3>Hooks</h3><p class="kind">What can't be skipped</p><p>Checks on every edit and command, in TypeScript, Go, PHP, Python, Rust, Java and more. They block, explain and make Claude fix the cause.</p></li>
+        </ol>
       </div>
-      <div class="column">
-        <h3>Agents</h3>
-        <p class="kind">Who does the bigger work</p>
-        <p>An architect plans, specialists build in parallel, a reviewer checks every result. Reviewers keep notes per project and get sharper over time.</p>
-      </div>
-      <div class="column">
-        <h3>Hooks</h3>
-        <p class="kind">What can't be skipped</p>
-        <p>Checks on every edit and command, in TypeScript, Go, PHP, Python, Rust, Java and more. They block, explain and make Claude fix the cause.</p>
-      </div>
+      <svg class="stack" viewBox="0 10 720 620" role="img" aria-label="Three layers stacked on top of your code: rules, agents and hooks."><defs><clipPath id="hz"><rect x="0" y="0" width="100" height="100"/></clipPath></defs><g class="plate pl-code"><polygon points="60,490 250,590 250,612 60,512" fill="#1D1530"/><polygon points="250,590 440,490 440,512 250,612" fill="#241939"/><polygon points="250,390 440,490 250,590 60,490" fill="#2B1F45"/><g transform="matrix(1.900 1.000 -1.900 1.000 250 390)"><rect x="16" y="20" width="30" height="5" rx="2.5" fill="#F2A33A" opacity=".85"/><rect x="50" y="20" width="26" height="5" rx="2.5" fill="#ECE6F8" opacity=".85"/><rect x="16" y="34" width="44" height="5" rx="2.5" fill="#ECE6F8" opacity=".85"/><rect x="24" y="48" width="36" height="5" rx="2.5" fill="#9FE0BF" opacity=".85"/><rect x="64" y="48" width="18" height="5" rx="2.5" fill="#ECE6F8" opacity=".85"/><rect x="24" y="62" width="50" height="5" rx="2.5" fill="#ECE6F8" opacity=".85"/><rect x="16" y="76" width="22" height="5" rx="2.5" fill="#F2A33A" opacity=".85"/></g><path d="M 452 490 H 476" stroke="#C9C2DA" stroke-width="2"/><text class="pl-name" x="486" y="488">Your code</text><text class="pl-kind" x="486" y="510">Stays untouched</text></g><g class="plate pl-rules" data-drop><polygon points="60,370 250,470 250,492 60,392" fill="#E4DFEF"/><polygon points="250,470 440,370 440,392 250,492" fill="#D3CCE4"/><polygon points="250,270 440,370 250,470 60,370" fill="#FFFFFF"/><g transform="matrix(1.900 1.000 -1.900 1.000 250 270)"><rect x="18" y="22" width="58" height="5" rx="2.5" fill="#C9C2DA"/><rect x="18" y="36" width="44" height="5" rx="2.5" fill="#C9C2DA"/><rect x="18" y="50" width="62" height="5" rx="2.5" fill="#C9C2DA"/><rect x="18" y="64" width="36" height="5" rx="2.5" fill="#C9C2DA"/></g><path d="M 452 370 H 476" stroke="#C9C2DA" stroke-width="2"/><text class="pl-name" x="486" y="368">Rules</text><text class="pl-kind" x="486" y="390">What Claude reads</text></g><g class="plate pl-agents" data-drop><polygon points="60,250 250,350 250,372 60,272" fill="#C3B7E2"/><polygon points="250,350 440,250 440,272 250,372" fill="#B3A5D6"/><polygon points="250,150 440,250 250,350 60,250" fill="#DCD3F0"/><g transform="matrix(1.900 1.000 -1.900 1.000 250 150)"><circle cx="30" cy="30" r="9" fill="#2B1F45"/><circle cx="66" cy="36" r="9" fill="#A8620A"/><circle cx="36" cy="68" r="9" fill="#5E5873"/><circle cx="70" cy="70" r="9" fill="#2B1F45"/></g><path d="M 452 250 H 476" stroke="#C9C2DA" stroke-width="2"/><text class="pl-name" x="486" y="248">Agents</text><text class="pl-kind" x="486" y="270">Who does the bigger work</text></g><g class="plate pl-hooks" data-drop><polygon points="60,130 250,230 250,252 60,152" fill="#D98A22"/><polygon points="250,230 440,130 440,152 250,252" fill="#C47A16"/><polygon points="250,30 440,130 250,230 60,130" fill="#F2A33A"/><g transform="matrix(1.900 1.000 -1.900 1.000 250 30)"><g clip-path="url(#hz)"><path d="M 0 0 L 12 0 L -88 100 L -100 100 Z" fill="#1D1530" opacity=".14"/><path d="M 26 0 L 38 0 L -62 100 L -74 100 Z" fill="#1D1530" opacity=".14"/><path d="M 52 0 L 64 0 L -36 100 L -48 100 Z" fill="#1D1530" opacity=".14"/><path d="M 78 0 L 90 0 L -10 100 L -22 100 Z" fill="#1D1530" opacity=".14"/><path d="M 104 0 L 116 0 L 16 100 L 4 100 Z" fill="#1D1530" opacity=".14"/><path d="M 130 0 L 142 0 L 42 100 L 30 100 Z" fill="#1D1530" opacity=".14"/><path d="M 156 0 L 168 0 L 68 100 L 56 100 Z" fill="#1D1530" opacity=".14"/><path d="M 182 0 L 194 0 L 94 100 L 82 100 Z" fill="#1D1530" opacity=".14"/><path d="M 208 0 L 220 0 L 120 100 L 108 100 Z" fill="#1D1530" opacity=".14"/></g></g><path d="M 452 130 H 476" stroke="#C9C2DA" stroke-width="2"/><text class="pl-name" x="486" y="128">Hooks</text><text class="pl-kind" x="486" y="150">What can't be skipped</text></g></svg>
     </div>
   </div>
 </section>
@@ -596,7 +645,7 @@
         <button type="button" id="film-sound">Sound on</button>
       </div>
     </figure>
-    <div class="columns">
+    <div class="columns" id="install-steps">
       <div class="column">
         <span class="step">Step 1</span>
         <h3>Drag it into Applications</h3>
@@ -652,11 +701,16 @@
           <li>Each teammate opens Settings, Team rules, and picks the folder.</li>
         </ol>
       </div>
-      <pre><code>team-rules/
-  team.json       name, default work mode, language
+      <div class="team-map" id="team-map">
+        <svg class="team-lines" viewBox="0 0 560 360" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M 246 180 C 296 180, 292 75, 342 75"/><path pathLength="1" d="M 246 180 C 296 180, 292 285, 342 285"/></svg>
+        <div class="tm-folder"><b>Your team’s shared folder</b><pre><code>team-rules/
+  team.json
   rules/
-    api.md        your API conventions
-    naming.md     your naming rules</code></pre>
+    api.md
+    naming.md</code></pre></div>
+        <div class="tm-mac" style="top: 0"><b>Your Mac</b><span class="tm-path">.claude/rules/</span><span class="tm-chips"><span class="tm-chip">team-api.md</span><span class="tm-chip">team-naming.md</span></span></div>
+        <div class="tm-mac" style="top: 210px"><b>Your teammate’s Mac</b><span class="tm-path">.claude/rules/</span><span class="tm-chips"><span class="tm-chip">team-api.md</span><span class="tm-chip">team-naming.md</span></span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -717,6 +771,14 @@
     playButton.textContent = film.paused ? "Play" : "Pause";
     soundButton.textContent = film.muted ? "Sound on" : "Sound off";
   };
+  const installSteps = document.getElementById("install-steps");
+  const stepColumns = [...installSteps.querySelectorAll(".column")];
+  const syncSteps = () => {
+    const t = film.currentTime;
+    const now = t < 3 ? 0 : t < 12 ? 1 : 2;
+    installSteps.classList.add("syncing");
+    stepColumns.forEach((column, index) => column.classList.toggle("now", index === now));
+  };
   startButton.addEventListener("click", () => {
     film = document.createElement("video");
     film.src = "media/install.mp4";
@@ -725,6 +787,7 @@
     film.loop = true;
     film.setAttribute("aria-label", "Fifteen-second film: drag the app into Applications, press Done, open Privacy and Security, press Open Anyway twice, and the app is ready.");
     for (const event of ["play", "pause", "volumechange"]) film.addEventListener(event, syncButtons);
+    film.addEventListener("timeupdate", syncSteps);
     filmFrame.insertBefore(film, filmControls);
     startButton.remove();
     filmControls.hidden = false;
@@ -793,7 +856,7 @@
   }
 
   function renderHero(p) {
-    const u = span(p, 0, .8), t = u * u * (3 - 2 * u);
+    const u = span(p, 0, .95), t = u * u * (3 - 2 * u);
     const from = heroSlot.getBoundingClientRect(), to = navMark.getBoundingClientRect();
     const s = 1 + (to.width / from.width - 1) * t;
     heroOwl.style.transform = `translate(${(to.left - from.left) * t}px, ${(to.top - from.top) * t}px) scale(${s})`;
@@ -801,9 +864,9 @@
     heroOwl.style.opacity = docked ? 0 : 1;
     nav.classList.toggle("docked", docked);
     heroGlow.style.opacity = 1 - t;
-    heroCopy.style.opacity = 1 - span(p, 0, .35);
-    heroCopy.style.transform = `translateY(${-80 * span(p, 0, .5)}px)`;
-    heroCopy.style.visibility = p > .36 ? "hidden" : "";
+    heroCopy.style.opacity = 1 - span(p, .05, .7);
+    heroCopy.style.transform = `translateY(${-80 * span(p, 0, .8)}px)`;
+    heroCopy.style.visibility = p > .71 ? "hidden" : "";
     watchOwl(p < .06);
   }
 
@@ -859,7 +922,7 @@
   const editor = $("#editor"), code = $("#code"), term = $("#term"), tab = $("#tab"), tab2 = $("#tab-2");
   const stamp = $("#stamp"), stampMsg = $("#stamp-msg"), eyeReport = $("#eye-report");
   const rows = $$(".row"), texts = $$(".text"), steps = $$("#steps span");
-  const BOUNDS = [0, .24, .48, .7, 1];
+  const BOUNDS = [0, .25, .5, .72, 1];
   let lastKey = "";
   function paint(st, cn, tn, cq, tq) {
     const key = `${st.tab}:${cn}:${tn}`;
@@ -888,7 +951,7 @@
     if (stopped) stampMsg.textContent = st.msg;
     editor.classList.toggle("dim", final);
     eyeReport.classList.toggle("on", final && q > .04);
-    rows.forEach((r, i) => r.classList.toggle("on", final && q > .22 + i * .2));
+    rows.forEach((r, i) => r.classList.toggle("on", final && q > .16 + i * .16));
   }
   function staticStory() {
     texts.forEach((t, i) => t.classList.toggle("on", i === 0 || i === 3));
@@ -905,15 +968,15 @@
   const arrows = $$("#agents .arrow path");
   const revSub = $("#rev-sub"), donePill = $("#done-pill");
   function renderAgents(p) {
-        cards.arch.className = "card" + (p > .03 ? " on" : "");
-    arrows[0].style.strokeDashoffset = 1 - span(p, .06, .2);
-    ["b0", "b1", "b2"].forEach((k, i) => (cards[k].className = "card" + (p > .21 + i * .04 ? " on" : "")));
-    arrows[1].style.strokeDashoffset = 1 - span(p, .36, .5);
-    const rs = p > .7 ? "done" : p > .5 ? "checking" : "";
+        cards.arch.className = "card" + (p > .02 ? " on" : "");
+    arrows[0].style.strokeDashoffset = 1 - span(p, .04, .18);
+    ["b0", "b1", "b2"].forEach((k, i) => (cards[k].className = "card" + (p > .19 + i * .04 ? " on" : "")));
+    arrows[1].style.strokeDashoffset = 1 - span(p, .32, .46);
+    const rs = p > .64 ? "done" : p > .47 ? "checking" : "";
     cards.rev.className = "card" + (rs ? " " + rs : "");
     revSub.textContent = rs === "done" ? "All three checked" : rs === "checking" ? "Checking every result" : "Waiting";
-    arrows[2].style.strokeDashoffset = 1 - span(p, .72, .84);
-    donePill.classList.toggle("on", p > .86);
+    arrows[2].style.strokeDashoffset = 1 - span(p, .66, .8);
+    donePill.classList.toggle("on", p > .82);
   }
 
   const modesTrack = $("#modes"), segThumb = $("#seg-thumb"), segButtons = $$("#seg button");
@@ -925,7 +988,7 @@
     segThumb.style.transform = `translateX(${m * 100}%)`;
     segButtons.forEach((b, i) => b.setAttribute("aria-pressed", String(i === m)));
     modeTexts.forEach((t, i) => t.classList.toggle("on", i === m));
-    files.forEach((f, i) => (f.className = "file" + (q > .12 + i * .17 ? " " + PLAN[m][i] : "")));
+    files.forEach((f, i) => (f.className = "file" + (q > .08 + i * .15 ? " " + PLAN[m][i] : "")));
     reportRule.textContent = REPORT[m];
   }
   function renderModes(p) {
@@ -939,7 +1002,28 @@
     scrollTo({ top: target, behavior: reduce.matches ? "auto" : "smooth" });
   }));
 
-  const scenes = { top: renderHero, story: renderStory, agents: renderAgents, modes: renderModes };
+
+  const plates = $$(".stack .plate[data-drop]"), layerItems = $$(".layer-list li");
+  function renderLayers(p) {
+    plates.forEach((plate, i) => {
+      const s = span(p, .04 + i * .3, .26 + i * .3);
+      plate.style.transform = `translateY(${-170 * (1 - ease(s))}px)`;
+      plate.style.opacity = s > 0 ? 1 : 0;
+      layerItems[i].classList.toggle("on", s > .5);
+    });
+  }
+  function staticLayers() {
+    plates.forEach((plate) => { plate.style.transform = ""; plate.style.opacity = ""; });
+    layerItems.forEach((item) => item.classList.add("on"));
+  }
+
+  const ledgerRows = $$(".ledger tbody tr");
+  function renderLedger() {
+    const line = innerHeight * .88;
+    ledgerRows.forEach((row) => row.classList.toggle("in", row.getBoundingClientRect().top < line));
+  }
+
+  const scenes = { top: renderHero, story: renderStory, layers: renderLayers, agents: renderAgents, modes: renderModes };
   const tracks = $$(".track");
   let ticking = false;
   function frame() {
@@ -947,6 +1031,7 @@
     nav.classList.toggle("lined", scrollY > 8);
     if (isStatic()) return watchOwl(scrollY < innerHeight * .5);
     for (const t of tracks) scenes[t.id](progress(t));
+    renderLedger();
   }
   function setMode() {
     const animated = !isStatic();
@@ -957,6 +1042,7 @@
     heroCopy.style.cssText = "";
     heroGlow.style.opacity = "";
     staticStory();
+    staticLayers();
     renderAgents(1);
     showMode(1, 1);
     frame();
@@ -986,6 +1072,38 @@
       };
       requestAnimationFrame(step);
     }, { threshold: .45 }).observe($("#week"));
+  }
+
+
+  const teamMap = $("#team-map");
+  if (reduce.matches) teamMap.classList.add("play");
+  else new IntersectionObserver(([entry], observer) => {
+    if (!entry.isIntersecting) return;
+    observer.disconnect();
+    teamMap.classList.add("play");
+  }, { threshold: .5 }).observe(teamMap);
+
+  const commandLines = $$(".commands code > span");
+  if (!reduce.matches) {
+    const full = commandLines.map((line) => line.textContent);
+    commandLines.forEach((line) => (line.textContent = ""));
+    const total = full.reduce((n, s) => n + s.length, 0);
+    new IntersectionObserver(([entry], observer) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      const start = performance.now();
+      const step = (now) => {
+        let left = Math.round(total * clamp((now - start) / 1800));
+        commandLines.forEach((line, i) => {
+          const shown = full[i].slice(0, Math.max(0, left));
+          left -= full[i].length;
+          const typing = shown.length > 0 && shown.length < full[i].length;
+          line.innerHTML = esc(shown) + (typing ? '<i class="caret"></i>' : "");
+        });
+        if (left < 0) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }, { threshold: .6 }).observe($(".commands"));
   }
 
   const endOwl = $(".end-owl"), pupils = $$(".end-owl .pupil");
