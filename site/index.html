@@ -272,17 +272,17 @@
   .commands code > span { min-height: 1.7em; }
   .commands .caret { display: inline-block; width: 8px; height: 15px; margin-left: 1px; vertical-align: -2px; background: var(--amber); }
 
-  .team-map { position: relative; height: 360px; }
+  .team-map { position: relative; height: 360px; width: 100%; max-width: 860px; }
   .team-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
   .team-lines path { fill: none; stroke: var(--amber-deep); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset .8s var(--ease); }
   .team-lines path + path { transition-delay: .15s; }
   .tm-folder { position: absolute; left: 0; top: 70px; width: 44%; height: 220px; display: flex; flex-direction: column; gap: 10px; padding: 22px 24px; border-radius: var(--radius-panel); background: var(--plum); color: #ece6f8; }
   .tm-folder b { font-size: 15px; color: #f7d9ad; }
-  .tm-folder pre { margin: 0; font: 400 14px/1.7 var(--mono); }
+  .tm-folder pre { margin: 0; padding: 0; background: none; overflow: visible; font: 400 14px/1.7 var(--mono); }
   .tm-mac { position: absolute; left: 61%; right: 0; height: 150px; display: flex; flex-direction: column; gap: 8px; padding: 18px 20px; border-radius: var(--radius-panel); background: var(--white); box-shadow: 0 0 0 1px var(--line); }
-  .tm-mac b { font-size: 17px; }
-  .tm-path { font: 13px var(--mono); color: var(--slate); }
-  .tm-chips { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+  .tm-mac b { font-size: 17px; white-space: nowrap; }
+  .tm-path { font: 13px var(--mono); color: var(--slate); white-space: nowrap; }
+  .tm-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
   .tm-chip { display: inline-flex; align-items: center; gap: 8px; padding: 2px 10px; border-radius: 7px; background: var(--lilac); font: 13px var(--mono); transition: opacity .25s, transform .3s cubic-bezier(.3, 1.5, .5, 1); }
   .tm-chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
   .tm-mac:nth-of-type(2) .tm-chip { transition-delay: .9s; }
@@ -296,14 +296,12 @@
   .columns.syncing .column:not(.now) { opacity: .4; }
   .columns.syncing .column.now::before { content: ""; position: absolute; top: -2px; left: 0; right: 28px; height: 2px; background: var(--amber); }
 
-  .team { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); align-items: stretch; margin-top: 40px; }
+  .team { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; margin-top: 40px; }
   .team-title { font-size: 21px; letter-spacing: -0.02em; margin: 0 0 12px; }
   .team-steps { margin: 0; padding-left: 22px; color: var(--slate); }
   .team-steps li { margin-bottom: 8px; }
   .team-steps a { color: var(--ink); }
   .team > div { display: flex; flex-direction: column; justify-content: center; }
-  .team pre { margin: 0; display: flex; align-items: center; background: var(--plum); color: #ece6f8; border-radius: var(--radius-panel); padding: 28px; font: 400 14.5px/1.7 var(--mono); overflow-x: auto; }
-  .team pre code { min-width: 0; }
 
   .faq > * { max-width: 780px; }
   details { border-top: 1px solid var(--line); padding: 20px 0; }
@@ -333,7 +331,6 @@
     .commands { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12.5px; }
     .commands span { padding-left: 2ch; text-indent: -2ch; }
     .option .actions .hint { white-space: normal; }
-    .team pre { padding: 20px; font-size: 12.5px; }
   }
   @media (max-width: 920px) {
     .story-grid, .modes-grid, .week-grid, .layers-grid, .options, .team { grid-template-columns: minmax(0, 1fr); gap: 40px; }
@@ -710,7 +707,7 @@
     api.md
     naming.md</code></pre></div>
         <div class="tm-mac" style="top: 0"><b>Your Mac</b><span class="tm-path">.claude/rules/</span><span class="tm-chips"><span class="tm-chip">team-api.md</span><span class="tm-chip">team-naming.md</span></span></div>
-        <div class="tm-mac" style="top: 210px"><b>Teammate on Windows</b><span class="tm-path">plugin, read each session</span><span class="tm-chips"><span class="tm-chip">api.md</span><span class="tm-chip">naming.md</span></span></div>
+        <div class="tm-mac" style="top: 210px"><b>Teammate on Windows</b><span class="tm-path">plugin, every session</span><span class="tm-chips"><span class="tm-chip">api.md</span><span class="tm-chip">naming.md</span></span></div>
       </div>
     </div>
   </div>
